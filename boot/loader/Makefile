@@ -1,20 +1,26 @@
-AS = nasm
+include $(TOPDIR)/config.mk
 
 ASFLAGS = -f elf64
 
-OBJS = a20.o gdt.o pmode.o main.o
+LDSCRIPT = link.ld
 
-LINK_SCRIPT = link.ld
+SRCS = $(wildcard *.asm)
+OBJS = $(SRCS:.asm=.o)
 
 BIN = boot
 
-all: $(OBJS)
-	@echo -e '  LD\t$(BIN)'
-	@$(LD) -T $(LINK_SCRIPT) -o $(BIN) $(OBJS)
+.PHONY: clean
+
+all: $(BIN)
 
 clean:
-	@rm -f $(OBJS)
+	@echo $(CLEAN_MSG)$(CWD)
+	@rm -f $(OBJS) $(BIN)
+
+$(BIN): $(OBJS)
+	@echo $(LD_MSG)$(CWD)$(BIN)
+	@$(LD) -T $(LDSCRIPT) -o $(BIN) $(OBJS)
 
 %.o: %.asm
-	@echo -e '  AS\t$<'
+	@echo $(AS_MSG)$(CWD)$@
 	@$(AS) $(ASFLAGS) -o $@ $<

@@ -3,10 +3,13 @@ bits 16
 global enter_pmode
 extern enable_a20
 extern load_gdt
-extern load_kernel
+;extern load_kernel
 extern eoc
 
 section .text
+
+load_kernel:
+   hlt
 
 enter_pmode:
    ; don't enter protected mode if we're already in it

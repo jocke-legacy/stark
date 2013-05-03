@@ -6,7 +6,13 @@ address = 0x7c00;
 SECTIONS {
    .text address : AT(address) {
       code = .;
-      *(.text)
+/*      *(.text) */
    }
+   
+   .data : AT(address + 510) {
+      data = .;
+/*      *(.data) */
+   }
+
    end = .;
 }
