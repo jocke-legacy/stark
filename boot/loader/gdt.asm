@@ -7,6 +7,8 @@ section .text
 load_gdt:
    lgdt  [gdtr]
 
+   ret
+
 
 gdtr:
    dw    gdt_end - gdt
