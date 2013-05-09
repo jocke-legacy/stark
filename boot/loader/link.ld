@@ -5,11 +5,24 @@ address = 0x7c00;
 
 SECTIONS {
    .text address : AT(address) {
-      main.o(.text)
+      text = .;
+      "main.o"(.text)
       *(.text)
    }
-   
-   .data : AT(address + 510) {
+
+   .data : AT(address + (data - text)) {
+      data = .;
       *(.data)
+   }
+
+   .signature : AT(address + 510) {
+      signature = .;
+      "signature.o"( .signature )
+   }
+
+  .bss : AT(address + (bss - signature)) {
+      bss = .;
+      "drivers/pci.o"(.bss)
+      "main.o"(.bss)
    }
 }

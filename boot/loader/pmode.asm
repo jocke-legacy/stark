@@ -2,7 +2,7 @@ bits 16
 
 global enter_pmode
 extern enable_a20
-extern load_gdt
+extern gdtr
 extern load_kernel
 
 section .text
@@ -10,7 +10,7 @@ section .text
 enter_pmode:
    ; get ready for protected mode
    cli
-   call  load_gdt
+   lgdt  [gdtr]
    call  enable_a20
 
    ; enter pmode

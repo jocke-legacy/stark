@@ -7,7 +7,7 @@ OBJS = $(SRCS:.asm=.o)
 
 BIN = boot
 
-.PHONY: clean
+.PHONY: all clean
 
 all: $(OBJS)
 

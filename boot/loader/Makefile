@@ -11,7 +11,7 @@ OBJS = $(SRCS:.asm=.o)
 
 BIN = boot
 
-.PHONY: clean $(SUBDIRS)
+.PHONY: all clean $(SUBDIRS)
 
 all: $(BIN)
 

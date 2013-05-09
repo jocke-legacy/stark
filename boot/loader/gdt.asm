@@ -1,25 +1,11 @@
-bits 16
+global gdtr
 
-global load_gdt
-
-section .text
-
-load_gdt:
-   lgdt  [gdtr]
-
-   ret
-
+section .data
 
 gdtr:
-   dw    gdt_end - gdt
-   dd    gdt
-
-gdt:
-   ; null descriptor
-   dw    0
-   dw    0
-   dw    0
-   dw    0
+   ; dummy descriptor, used as gdt pointer to save 8 bytes
+   dw    gdt_end - gdtr
+   dd    gdtr
 
    ; flat setup
    ; code descriptor
