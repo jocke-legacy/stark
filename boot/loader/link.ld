@@ -23,6 +23,7 @@ SECTIONS {
   .bss : AT(address + (bss - signature)) {
       bss = .;
       "drivers/pci.o"(.bss)
+      "loader.o"(.bss)
       "main.o"(.bss)
    }
 }

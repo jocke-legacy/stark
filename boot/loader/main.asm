@@ -15,7 +15,7 @@ get_memmap:
    mov   es, ax
    mov   di, memory_map
 
-   and   ebx, 0
+   xor   ebx, ebx
    mov   eax, 0xe820
    mov   edx, 0x534d4150
    mov   ecx, 24

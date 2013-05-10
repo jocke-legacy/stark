@@ -6,6 +6,7 @@ gdtr:
    ; dummy descriptor, used as gdt pointer to save 8 bytes
    dw    gdt_end - gdtr
    dd    gdtr
+   dw    0
 
    ; flat setup
    ; code descriptor

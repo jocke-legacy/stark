@@ -1,6 +1,8 @@
 bits 32
 
 global load_kernel
+extern pci_scan
+
 
 reload_segments:
    mov   ax, 0x10
@@ -14,10 +16,17 @@ reload_segments:
 
 load_kernel:
    call  reload_segments
+   call  pci_scan
 
-   mov   al, 0x41
-   mov   ah, 0x07
+   jc    hang
+
    mov   edi, 0xb8000
-   mov   word [ds:edi], ax
+   mov   ax, 0x0f41
+   mov   [edi], ax
 
-   hlt
+hang:
+   jmp   $
+
+section .data
+
+message db "Success!", 0x00
