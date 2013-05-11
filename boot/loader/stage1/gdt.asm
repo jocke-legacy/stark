@@ -3,7 +3,7 @@ global gdtr
 section .data
 
 gdtr:
-   ; dummy descriptor, used as gdt pointer to save 8 bytes
+   ; dummy descriptor, used as gdt pointer to save 6 bytes
    dw    gdt_end - gdtr
    dd    gdtr
    dw    0

@@ -1,19 +1,12 @@
 bits 16
 
-global start
-global memory_map
-extern enter_pmode
-
-section .text
-
-start:
-   call  get_memmap
-   jmp   enter_pmode
+global get_memmap
+global MEMMAP_ADDR
 
 get_memmap:
    mov   ax, 0
    mov   es, ax
-   mov   di, memory_map
+   mov   di, MEMMAP_ADDR
 
    xor   ebx, ebx
    mov   eax, 0xe820
@@ -53,4 +46,4 @@ get_memmap:
 
 section .bss
 
-memory_map:
+MEMMAP_ADDR resq 512

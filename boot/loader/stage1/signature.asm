@@ -1,5 +1,3 @@
-global end_of_sector
-
 section .signature
 
 signature:
