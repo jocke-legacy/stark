@@ -1,9 +1,11 @@
 bits 32
 
 global start
-extern stage2
+extern bmain
 
 section .text
 
 start:
-   jmp   stage2
+   call  bmain
+
+   hlt

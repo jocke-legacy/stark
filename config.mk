@@ -2,6 +2,10 @@ LD := ld
 AS := nasm
 CC := gcc
 
+CFLAGS  := -c -O2 -Wall -Wextra -Werror -pedantic -std=c99 \
+           -nostdlib -fno-builtin -nostartfiles -nodefaultlibs
+ASFLAGS := -f elf64
+
 # these should burn in hell:
 .SUFFIXES:
 

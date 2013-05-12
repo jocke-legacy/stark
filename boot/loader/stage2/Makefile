@@ -1,9 +1,8 @@
 include ../../../config.mk
 
-ASFLAGS := -f elf64
-CFLAGS  := -c -Wall
-
 SUBDIRS := drivers/
+
+CFLAGS += -I./include
 
 SRCS := $(wildcard *.asm *.c)
 OBJS := $(addsuffix .o, $(SRCS))

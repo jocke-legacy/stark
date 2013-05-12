@@ -1,7 +1,5 @@
 include ../../../config.mk
 
-ASFLAGS = -f elf64
-
 SRCS = $(wildcard *.asm)
 OBJS = $(addsuffix .o, $(SRCS))
 

@@ -1,7 +1,6 @@
 include ../../../../config.mk
 
-ASFLAGS := -f elf64
-CFLAGS  := -c -Wall
+CFLAGS += -I../include
 
 SRCS := $(wildcard *.asm *.c)
 OBJS := $(addsuffix .o, $(SRCS))
@@ -18,6 +17,6 @@ clean:
 	@echo $(AS_MSG)$(CWD)$@
 	@$(AS) $(ASFLAGS) -o $@ $<
 
-%.c.o: %.c
+%.c.o: %.c %.h
 	@echo $(CC_MSG)$(CWD)$@
 	@$(CC) $(CFLAGS) -o $@ $<

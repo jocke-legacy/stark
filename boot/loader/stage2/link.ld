@@ -6,12 +6,13 @@ address = 0x8000;
 SECTIONS {
    .text address : AT(address) {
       text = .;
-      "main.asm.o"(.text)
+      "start.asm.o"(.text)
       *(.text)
    }
 
    .data : AT(address + (data - text)) {
       data = .;
+      *(.rodata);
       *(.data)
    }
 
