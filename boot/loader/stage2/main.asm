@@ -1,10 +1,9 @@
 bits 32
 
 global start
+extern stage2
+
+section .text
 
 start:
-   mov   ebx, 0xb8000
-   mov   ax, 0x0f41
-   mov   [ebx], ax
-
-   hlt
+   jmp   stage2
