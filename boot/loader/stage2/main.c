@@ -2,4 +2,5 @@
 
 void bmain(void) {
    clearscr();
+   printb("Hello world!");
 }

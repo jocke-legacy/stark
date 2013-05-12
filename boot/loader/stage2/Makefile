@@ -21,7 +21,7 @@ clean: $(SUBDIRS)
 
 $(BIN): $(OBJS) $(LDSCRIPT)
 	@echo $(LD_MSG)$(CWD)$(BIN)
-	@$(LD) -T $(LDSCRIPT) -o $(BIN) $(OBJS) \
+	@$(LD) $(LDFLAGS) -T $(LDSCRIPT) -o $(BIN) $(OBJS) \
 	   $(call rwildcard, $(SUBDIRS), *.o)
 
 %.asm.o: %.asm
