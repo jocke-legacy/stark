@@ -6,7 +6,7 @@ address = 0x7c00;
 SECTIONS {
    .text address : AT(address) {
       text = .;
-      "main.o"(.text)
+      "main.asm.o"(.text)
       *(.text)
    }
 
@@ -17,12 +17,12 @@ SECTIONS {
 
    .signature : AT(address + 510) {
       signature = .;
-      "signature.o"( .signature )
+      "signature.asm.o"(.signature)
    }
 
   .bss : AT(address + (bss - signature)) {
       bss = .;
-      "loader.o"(.bss)
+      "loader.asm.o"(.bss)
       *(.bss)
    }
 }

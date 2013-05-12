@@ -6,7 +6,7 @@ address = 0x8000;
 SECTIONS {
    .text address : AT(address) {
       text = .;
-      "main.o"(.text)
+      "main.asm.o"(.text)
       *(.text)
    }
 

@@ -1,33 +1,37 @@
 include ../../../config.mk
 
-ASFLAGS	= -f elf64
-CFLAGS	= -c -Wall
+ASFLAGS := -f elf64
+CFLAGS  := -c -Wall
 
-ASSRCS = $(wildcard *.asm)
-CSRCS  = $(wildcard *.c)
-OBJS   = $(ASSRCS:.asm=.o) \
-         $(CSRCS:.c=.o)
+SUBDIRS := drivers/
 
-LDSCRIPT = link.ld
+SRCS := $(wildcard *.asm *.c)
+OBJS := $(addsuffix .o, $(SRCS))
 
-BIN = stage2
+LDSCRIPT := link.ld
 
-.PHONY: all clean
+BIN := stage2
 
-all: $(BIN)
+.PHONY: all clean $(SUBDIRS)
 
-clean:
+all: $(SUBDIRS) $(BIN)
+
+clean: $(SUBDIRS)
 	@echo $(CLEAN_MSG)$(CWD)
 	@rm -f $(OBJS) $(BIN)
 
 $(BIN): $(OBJS) $(LDSCRIPT)
 	@echo $(LD_MSG)$(CWD)$(BIN)
-	@$(LD) -T $(LDSCRIPT) -o $(BIN) $(OBJS) 	
+	@$(LD) -T $(LDSCRIPT) -o $(BIN) $(OBJS) \
+	   $(call rwildcard, $(SUBDIRS), *.o)
 
-%.o: %.asm
+%.asm.o: %.asm
 	@echo $(AS_MSG)$(CWD)$@
 	@$(AS) $(ASFLAGS) -o $@ $<
 
-%.o: %.c
+%.c.o: %.c
 	@echo $(CC_MSG)$(CWD)$@
 	@$(CC) $(CFLAGS) -o $@ $<
+
+$(SUBDIRS):
+	@CWD=$(CWD)$@ $(MAKE) -C $@ $(MAKECMDGOALS)

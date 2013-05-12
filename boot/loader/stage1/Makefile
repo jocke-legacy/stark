@@ -2,10 +2,10 @@ include ../../../config.mk
 
 ASFLAGS = -f elf64
 
-LDSCRIPT = link.ld
-
 SRCS = $(wildcard *.asm)
-OBJS = $(SRCS:.asm=.o)
+OBJS = $(addsuffix .o, $(SRCS))
+
+LDSCRIPT = link.ld
 
 BIN = stage1
 
@@ -21,6 +21,6 @@ $(BIN): $(OBJS) $(LDSCRIPT)
 	@echo $(LD_MSG)$(CWD)$(BIN)
 	@$(LD) -T $(LDSCRIPT) -o $(BIN) $(OBJS)
 
-%.o: %.asm
+%.asm.o: %.asm
 	@echo $(AS_MSG)$(CWD)$@
 	@$(AS) $(ASFLAGS) -o $@ $<
