@@ -32,8 +32,7 @@ inw:
 inl:
    push  ebp
    mov   ebp, esp
-   mov   eax, dword [ebp+8]
-   xor   eax, eax
+   mov   dx, word [ebp+8]
    in    eax, dx
 
    leave

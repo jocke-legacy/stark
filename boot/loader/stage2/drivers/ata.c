@@ -4,47 +4,49 @@
 #include "ata.h"
 #include "console.h"
 
-void ata_init(void) {
-   if (ata_detect(0, 0) != 0x000000) {
-      printb("IDE controller detected!\n");
+uint_32 ata_init(void) {
+   uint_32 address;
+
+   printb("Searching for IDE controller...");
+   if ((address = ata_detect(0, 0)) != 0xffffffff) {
+      printb("detected!\n");
+      return address;
    }
    else {
-      printb("No IDE controller detected.\n*** Halting...");
-      while (1);
+      printb("not found!\n");
+      return address;
    }
 }
 
 uint_32 ata_detect(uint_16 bus, uint_16 device) {
-   uint_32 address;
-   uint_32 offset;
-   uint_16 c;
+   uint_32 address_base, address;
 
-   offset = 0x08;
+   address_base = ((uint_32) bus    << 16) |
+                  ((uint_32) device << 11) |
+                  0x80000000;
+   address = address_base | ((uint_32) (0x08 & 0xfc));
 
-   if (bus < 256 && device < 32) {
-      address = (uint_32) (((uint_32) bus    << 16)  |
-                           ((uint_32) device << 11)  |
-                           ((uint_32) offset & 0xfc) |
-                           ((uint_32) 0x80000000));
-
-      outl(0x0cf8, address);
-      if ((c = (uint_16) (inl(0x0cfc)) << 16) == 0x0105) {
-         return address ^ (offset & 0xfc);
+   outl(PCI_CONFIG_ADDR, address);
+   if (((uint_16) (inl(PCI_CONFIG_DATA) >> 16)) == 0x0101) {
+      return address_base;
+   }
+   else if (bus < 256) {
+      if (device < 32) {
+         return ata_detect(bus, device + 1);
       }
       else {
-         return ata_detect((device < 31 ? bus : bus + 1),
-                           (device < 31 ? device + 1 : 0));
+         return ata_detect(bus + 1, 0);
       }
    }
    else {
-      return 0x00000000;
+      return 0xffffffff;
    }
 }
 
 uint_32 ata_get_BAR4(uint_32 address) {
-   address |= (uint_32) 0x20;
-   outl(0x0cf8, address);
+   address |= (uint_32) (0x20 & 0xfc);
+   outl(PCI_CONFIG_ADDR, address);
 
-   return inl(0x0cfc);
+   return inl(PCI_CONFIG_DATA);
 }
 
