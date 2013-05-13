@@ -2,10 +2,10 @@ LD := ld
 AS := nasm
 CC := gcc
 
-LDFLAGS := -melf_i386 --architecture i386 --noinhibit-exec
+LDFLAGS := -melf_i386 --architecture i386
 CFLAGS  := -m32 -c -O2 -Wall -Wextra  -pedantic -std=c99 \
            -nostdlib -fno-builtin -nostartfiles -nodefaultlibs
-ASFLAGS := -f elf32
+ASFLAGS := -f elf
 
 # these should burn in hell:
 .SUFFIXES:
