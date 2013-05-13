@@ -22,7 +22,7 @@ void printhexb(uint_32 num) {
    printb("0x");
    for (i = 7; i >= 0; i--) {
       c = hexdigits[(num >> 4*i) % 0x10];
-      if (c != '0' && msb == 0) {
+      if ((c != '0' || i <= 1) && msb == 0) {
          msb = 1;
       }
       if (msb == 1) {

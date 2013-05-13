@@ -4,8 +4,6 @@
 void bmain(void) {
    clearscr();
 
-   printb("Stark Loader (Stage2)\n\nTest number: ");
-   printhexb(0xabc);
-   printb("\n\n");
-//   ata_init();
+   printb("Stark Loader (Stage2)\n\n");
+   ata_init();
 }

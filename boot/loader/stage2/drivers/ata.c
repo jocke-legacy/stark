@@ -9,7 +9,10 @@ uint_32 ata_init(void) {
 
    printb("Searching for IDE controller...");
    if ((address = ata_detect(0, 0)) != 0xffffffff) {
-      printb("detected!\n");
+      printb("detected!");
+      printb("Config address: ");
+      printhexb(address);
+      putcb('\n');
       return address;
    }
    else {
@@ -24,10 +27,10 @@ uint_32 ata_detect(uint_16 bus, uint_16 device) {
    address_base = ((uint_32) bus    << 16) |
                   ((uint_32) device << 11) |
                   0x80000000;
-   address = address_base | ((uint_32) (0x08 & 0xfc));
+   address = address_base | (uint_32) (0x10 & 0xfc);
 
    outl(PCI_CONFIG_ADDR, address);
-   if (((uint_16) (inl(PCI_CONFIG_DATA) >> 16)) == 0x0101) {
+   if ((uint_16) inl(PCI_CONFIG_DATA) == 0x0105) {
       return address_base;
    }
    else if (bus < 256) {
@@ -39,6 +42,11 @@ uint_32 ata_detect(uint_16 bus, uint_16 device) {
       }
    }
    else {
+      putcb('\n');
+      printhexb(bus);
+      putcb('\n');
+      printhexb(device);
+      putcb('\n');
       return 0xffffffff;
    }
 }

@@ -12,7 +12,7 @@ SECTIONS {
 
    .data : AT(address + (data - text)) {
       data = .;
-      *(.rodata);
+      *(.rodata*);
       *(.data)
    }
 
