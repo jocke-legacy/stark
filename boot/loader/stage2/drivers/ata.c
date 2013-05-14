@@ -7,9 +7,9 @@
 uint_32 ata_init(void) {
    uint_32 address;
 
-   printb("Searching for IDE controller...");
-   if ((address = ata_detect(0, 0)) != 0xffffffff) {
-      printb("detected!");
+   printb("Detecting IDE controller...");
+   if ((address = ata_detect(0, 0, 0)) != 0xffffffff) {
+      printb("detected!\n");
       printb("Config address: ");
       printhexb(address);
       putcb('\n');
@@ -21,32 +21,44 @@ uint_32 ata_init(void) {
    }
 }
 
-uint_32 ata_detect(uint_16 bus, uint_16 device) {
-   uint_32 address_base, address;
+int pci_exists(uint_32 address_base) {
+   outl(PCI_CONFIG_ADDR, address_base);
+ 
+   return inl(PCI_CONFIG_DATA) != 0xffffffff;
+}
 
-   address_base = ((uint_32) bus    << 16) |
-                  ((uint_32) device << 11) |
+int pci_is_ide(uint_32 address_base) {
+   uint_32 data;
+
+   outl(PCI_CONFIG_ADDR, address_base | ((uint_32) 0x04<< 2));
+   data = inl(PCI_CONFIG_DATA);
+   putcb('\n');
+   printhexb(data);
+   putcb('\n');
+   return (uint_16) (data >> 16) == 0x0101;
+}
+
+uint_32 ata_detect(uint_8 bus, uint_8 device, uint_8 function) {
+   uint_32 address_base;
+
+   address_base = ((uint_32) bus      << 16) |
+                  ((uint_32) device   << 11) |
+                  ((uint_32) function << 8)  |
                   0x80000000;
-   address = address_base | (uint_32) (0x10 & 0xfc);
 
-   outl(PCI_CONFIG_ADDR, address);
-   if ((uint_16) inl(PCI_CONFIG_DATA) == 0x0105) {
+   if (pci_exists(address_base) && pci_is_ide(address_base)) {
       return address_base;
    }
-   else if (bus < 256) {
-      if (device < 32) {
-         return ata_detect(bus, device + 1);
-      }
-      else {
-         return ata_detect(bus + 1, 0);
-      }
+   else if (function != 8) {
+      return ata_detect(bus, device, ++function);
+   }
+   else if (device != 32) {
+      return ata_detect(bus, ++device, 0);
+   }
+   else if (bus != 255) {
+      return ata_detect(++bus, 0, 0);
    }
    else {
-      putcb('\n');
-      printhexb(bus);
-      putcb('\n');
-      printhexb(device);
-      putcb('\n');
       return 0xffffffff;
    }
 }
