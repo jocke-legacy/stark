@@ -1,7 +1,7 @@
 bits 32
 
 global inb
-global inwke
+global inw
 global inl
 global outb
 global outw
